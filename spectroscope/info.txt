@@ -1,0 +1,2 @@
+added this file to make the general composition of a pip installable package
+delete in the end if needed
