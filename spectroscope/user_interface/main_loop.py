@@ -15,19 +15,17 @@ class SpectroscopeUI:
 from GraphInterface import GraphInterface
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    root.title("YSO_spectroscope")
     # with open("default_style.json", "r") as f:
     #     style_dict = json.load(f)
-    spectroscope = SpectroscopeUI(style_dict)
+    spectroscope = SpectroscopeUI({})
 
     coordinate = [(400, 4), (500, 7), (600, 12), (700, 5)]
 
-    graph_frame = tk.Frame(root)
+    graph_frame = tk.Frame(spectroscope.root)
     graph_frame.place(relwidth=0.7, relheight=1.0)
-    grap = GraphInterface(root, graph_frame)
+    grap = GraphInterface(spectroscope.root, graph_frame)
 
-    button_frame = tk.Frame(root, bg='green')
+    button_frame = tk.Frame(spectroscope.root, bg='green')
     button_frame.place(relx=0.7, relwidth=0.3, relheight=1.0)
     grap.SetSpectrePositions(coordinate)
     grap.ShowGraph()
