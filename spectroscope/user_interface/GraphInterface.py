@@ -3,8 +3,9 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class GraphInterface:
-    def __init__(self, root):
+    def __init__(self, root, graph_frame):
         self.root = root
+        self.graph_frame = graph_frame
 
     def SetSpectrePositions(self, coord: list[float]):
         self.coordinate = coord
@@ -17,6 +18,6 @@ class GraphInterface:
         ax = fig.add_subplot(111)
 
         ax.plot(x_point, y_point)
-        canvas = FigureCanvasTkAgg(fig, master=self.root)
+        canvas = FigureCanvasTkAgg(fig, master=self.graph_frame)
         canvas.draw()
-        canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+        canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
