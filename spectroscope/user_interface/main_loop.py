@@ -13,6 +13,7 @@ class SpectroscopeUI:
         self.style_dict = style_dict
         self.control_panel = ControlPanelInterface(self.root, self.style_dict).place(relx=0.7, relwidth=0.3, relheight=1.0)
 
+
 if __name__ == "__main__":
 
     with open("default_style.json", "r") as f:
