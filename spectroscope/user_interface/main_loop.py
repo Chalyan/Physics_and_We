@@ -18,5 +18,4 @@ if __name__ == "__main__":
     with open("default_style.json", "r") as f:
         style_dict = json.load(f)
     spectroscope = SpectroscopeUI({})
-
     spectroscope.root.mainloop()
