@@ -20,9 +20,4 @@ if __name__ == "__main__":
         style_dict = json.load(f)
     spectroscope = SpectroscopeUI({})
 
-    coordinate = [(400, 4), (500, 7), (600, 12), (700, 5)]
-
-    spectroscope.graph.SetSpectrePositions(coordinate)
-    spectroscope.graph.ShowGraph()
-
     spectroscope.root.mainloop()
