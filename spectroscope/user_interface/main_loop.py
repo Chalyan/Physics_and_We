@@ -2,6 +2,7 @@ import tkinter as tk
 import json
 from backend_functions import Backend
 from typing import Dict
+from GraphInterface import GraphInterface
 
 
 class SpectroscopeUI:
@@ -10,24 +11,18 @@ class SpectroscopeUI:
         self.root = tk.Tk()
         self.root.title("YSO_spectroscope")
         self.style_dict = style_dict
-
-
-from GraphInterface import GraphInterface
+        graph_frame = tk.Frame(self.root)
+        self.graph = GraphInterface(self.root, graph_frame)
+        self.graph.graph_frame.place(relwidth=0.7, relheight=1.0)
 
 if __name__ == "__main__":
-    # with open("default_style.json", "r") as f:
-    #     style_dict = json.load(f)
+    with open("default_style.json", "r") as f:
+        style_dict = json.load(f)
     spectroscope = SpectroscopeUI({})
 
     coordinate = [(400, 4), (500, 7), (600, 12), (700, 5)]
 
-    graph_frame = tk.Frame(spectroscope.root)
-    graph_frame.place(relwidth=0.7, relheight=1.0)
-    grap = GraphInterface(spectroscope.root, graph_frame)
-
-    button_frame = tk.Frame(spectroscope.root, bg='green')
-    button_frame.place(relx=0.7, relwidth=0.3, relheight=1.0)
-    grap.SetSpectrePositions(coordinate)
-    grap.ShowGraph()
+    spectroscope.graph.SetSpectrePositions(coordinate)
+    spectroscope.graph.ShowGraph()
 
     spectroscope.root.mainloop()

@@ -2,9 +2,10 @@ import tkinter as tk
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-class GraphInterface:
-    def __init__(self, root, graph_frame):
-        self.root = root
+class GraphInterface(tk.Frame):
+    def __init__(self, parent, graph_frame):
+        tk.Frame.__init__(self, parent, graph_frame)
+        self.parent = parent
         self.graph_frame = graph_frame
 
     def SetSpectrePositions(self, coord: list[float]):
