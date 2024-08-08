@@ -1,5 +1,6 @@
 import tkinter as tk
 import threading
+import numpy as np
 
 class ControlPanelInterface(tk.Frame):
     options = ["Intensity", "Absorption", "Transmission"]
@@ -8,6 +9,8 @@ class ControlPanelInterface(tk.Frame):
         self.root = parent
         self.style_dict = style_dict
         self.wrapper = wrapper
+        self.start_button = tk.Button(self, text="Start", command=self.toggle_process)
+        self.start_button.pack(pady=10)
         self.add_listener_()
         self.selected_option = self.options[0]
         self.AverageSlider = tk.Scale(self, from_=1, to=100,
@@ -16,11 +19,16 @@ class ControlPanelInterface(tk.Frame):
         self.start_button = tk.Button(self, text="Start", command=self.toggle_process )
         self.start_button.pack()
         self.running = False
+        self.load_button = tk.Button(self, text="Load", command=self.load_func)
+        self.load_button.pack()
 
+        # Initialize arrays to store the data
+        self.Dark_spectrum_data = np.array([])
+        self.restrict_data = np.array([])
 
     def long_running_process(self):
         while self.running:
-            print("..........")
+            data = self.wrapper.backend.read_data1(self.AverageSlider.get())
 
     def on_choice(self):
         choice = self.var.get()
@@ -35,19 +43,28 @@ class ControlPanelInterface(tk.Frame):
             radio.pack(anchor=tk.E, side=tk.TOP, pady=10)
 
     def toggle_process(self):
-
-        # Disable the button
         self.start_button.config(state="disabled")
 
-        # Cooldown
         cooldown_period = 500  # 0.5 second
 
         if not self.running:
-            self.running = True  # Start the process
+
+            self.running = True
             self.start_button["text"] = "Stop"
             threading.Thread(target=self.long_running_process, daemon=True).start()
+
         else:
-            self.running = False  # Stop the process
+            self.running = False
             self.start_button["text"] = "Start"
 
+
         self.root.after(cooldown_period, lambda: self.start_button.config(state="normal"))
+
+    def load_func(self): 
+        the_file = tk.askopenfilename(  # Open explorer
+            title = "Select a .csv file",  
+            filetypes = (("CSV Files","*.csv"),) # File type only csv
+            )  
+        with open(the_file, 'r') as file: 
+            csv_file = file.readlines()
+            self.wrapper.graph.loadGraph(csv_file)
