@@ -20,4 +20,9 @@ if __name__ == "__main__":
         style_dict = json.load(f)
     spectroscope = SpectroscopeUI({})
 
+    # Helper method for processing the choice of a radio button.
+
+    # def on_option_change(option):
+    #     print(f"Option changed to: {option}")
+
     spectroscope.root.mainloop()
