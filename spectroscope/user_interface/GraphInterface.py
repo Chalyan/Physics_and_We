@@ -1,4 +1,3 @@
-import csv
 import tkinter as tk
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -6,9 +5,10 @@ import pandas as pd
 import numpy as np
 
 class GraphInterface(tk.Frame):
-    def __init__(self, parent, graph_frame):
+    def __init__(self, parent,wrapper ,graph_frame):
         tk.Frame.__init__(self, parent, graph_frame)
         self.parent = parent
+        self.wrapper = wrapper
         self.graph_frame = graph_frame
         self.canvas = None
 

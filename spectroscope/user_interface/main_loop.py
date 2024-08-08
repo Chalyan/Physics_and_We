@@ -3,7 +3,7 @@ import json
 from backend_functions import Backend
 from typing import Dict
 from GraphInterface import GraphInterface
-import  numpy as np
+import numpy as np
 
 class SpectroscopeUI:
     def __init__(self, style_dict: Dict):
@@ -12,13 +12,13 @@ class SpectroscopeUI:
         self.root.title("YSO_spectroscope")
         self.style_dict = style_dict
         graph_frame = tk.Frame(self.root)
-        self.graph = GraphInterface(self.root, graph_frame)
+        self.graph = GraphInterface(self.root, self,graph_frame)
         self.graph.graph_frame.place(relwidth=0.7, relheight=1.0)
 
 if __name__ == "__main__":
     with open("default_style.json", "r") as f:
         style_dict = json.load(f)
-    spectroscope = SpectroscopeUI({})
+    spectroscope = SpectroscopeUI(style_dict)
     custom_data = np.array([
         [1, 10],
         [2, 20],
