@@ -1,11 +1,9 @@
 import csv
 import tkinter as tk
-
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
-import math
-
+import numpy as np
 
 class GraphInterface(tk.Frame):
     def __init__(self, parent, graph_frame):
@@ -27,57 +25,36 @@ class GraphInterface(tk.Frame):
             self.transmittance_pos = coord
             self.calculate_transmittance_pos()
 
-
     def calculate_transmittance_pos(self):
-        i = 0
-        for y in self.transmittance_pos:
-            y_list = list(y)
-            y_list[1] = math.log(1 - self.intensity_pos[i] / self.reference_spectrum)
-            self.transmittance_pos[i] = tuple(y_list)
-            i += 1
+        self.transmittance_pos[:, 1] = np.log(1 - self.intensity_pos[:, 1] / self.reference_spectrum[:, 1])
 
     def calculate_absorbance_pos(self):
-        i = 0
-        for y in self.absorbance_pos:
-            y_list = list(y)
-            y_list[1] = math.log(self.intensity_pos[i] / self.reference_spectrum)
-            self.absorbance_pos[i] = tuple(y_list)
-            i += 1
+        self.absorbance_pos[:, 1] = np.log(self.intensity_pos[:, 1] / self.reference_spectrum[:, 1])
 
     def calculate_intensity_pos(self):
-        i = 0
-        for y in self.intensity_pos:
-            y_list = list(y)
-            y_list[1] -= self.dark_spectrum
-            self.intensity_pos[i] = tuple(y_list)
-            i += 1
+        self.intensity_pos[:, 1] -= self.dark_spectrum[:, 1]
 
-    def set_dark_spectrum(self, noise: float):
+    def set_dark_spectrum(self, noise: np.ndarray):
         self.dark_spectrum = noise
 
-    def get_reference_spectrum(self, refNoise: float):
+    def get_reference_spectrum(self, refNoise: np.ndarray):
         self.reference_spectrum = refNoise
+        self.reference_spectrum[:, 1] -= self.dark_spectrum[:, 1]
 
     def get_positions_csv(self):
         return pd.DataFrame(self.coordinate)
 
     def load_graph(self, csv_file: str):
-        self.coordinate = self.csv_to_list_of_tuples(csv_file)
+        self.coordinate = self.csv_to_numpy_array(csv_file)
         self.show_graph()
 
-    def csv_to_list_of_tuples(self, file_path: str):
-        list_of_tuples = []
-
-        with open(file_path, mode='r', newline='') as file:
-            csv_reader = csv.reader(file)
-            for row in csv_reader:
-                list_of_tuples.append((int(row[0]), int(row[1])))
-
-        return list_of_tuples
+    def csv_to_numpy_array(self, file_path: str):
+        data = np.loadtxt(file_path, delimiter=',', dtype=int)
+        return data
 
     def show_graph(self):
-        x_point = [coord[0] for coord in self.coordinate]
-        y_point = [coord[1] for coord in self.coordinate]
+        x_point = self.intensity_pos[:, 0]
+        y_point = self.intensity_pos[:, 1]
 
         fig = Figure(figsize=(5, 4), dpi=100)
         ax = fig.add_subplot(111)
