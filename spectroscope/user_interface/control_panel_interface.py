@@ -22,6 +22,8 @@ class ControlPanelInterface(tk.Frame):
         self.status_label.pack(padx=20,pady=5,fill=tk.X)
         self.load_button = tk.Button(self, text="Load", command=self.load_func)
         self.load_button.pack()
+        self.dark_spectrum_button = tk.Button(self, text = "Dark Spectrum",command = self.dark_spectrum)
+        self.dark_spectrum_button.pack()
 
 
     def long_running_process(self):
@@ -56,3 +58,6 @@ class ControlPanelInterface(tk.Frame):
         with open(the_file, 'r') as file: 
             csv_file = file.readlines()
             self.wrapper.graph.loadGraph(csv_file)
+
+    def dark_spectrum(self):
+        self.wrapper.graph.set_dark_spectrum()
