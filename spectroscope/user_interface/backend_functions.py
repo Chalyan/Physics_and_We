@@ -44,3 +44,10 @@ class Backend:
                     else:
                         reading = False
         return data_in_uint16
+
+    def start_device(self):
+        self.ser.write(self.start_command)
+
+    def stop_device(self):
+        self.ser.write(self.stop_command)
+
