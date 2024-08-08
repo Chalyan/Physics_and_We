@@ -13,7 +13,7 @@ class SpectroscopeUI:
         self.style_dict = style_dict
 
         # Initialize the control panel interface and pass the backend to it
-        self.control_panel = ControlPanelInterface(self.root, self.style_dict, self.backend)
+        self.control_panel = ControlPanelInterface(self.root,self , self.style_dict)
         self.control_panel.place(relx=0.7, relwidth=0.3, relheight=1.0)
 
 if __name__ == "__main__":

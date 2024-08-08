@@ -14,11 +14,8 @@ class ControlPanelInterface(tk.Frame):
         self.start_button = tk.Button(self, text="Start", command=self.toggle_process)
         self.start_button.pack(pady=10)
 
-        self.AverageSlider = tk.Scale(self, from_=1, to=100,
-                                      **self.style_dict["Scale"])
+        self.AverageSlider = tk.Scale(self, from_=1, to=100, **self.style_dict["Scale"])
         self.AverageSlider.pack()
-        self.start_button = tk.Button(self, text="Start", command=self.toggle_process )
-        self.start_button.pack()
         self.running = False  # Assume the process is not running at the beginning
         self.status_label= tk.Label(self,text="Waiting for background measurement...",relief=tk.SUNKEN,anchor="w")
         self.status_label.pack(padx=20,pady=5,fill=tk.X)
@@ -31,8 +28,7 @@ class ControlPanelInterface(tk.Frame):
 
     def long_running_process(self):
         while self.running:
-            data = self.wrapper.backend.read_data()
-            print("Acquiring data:", data)
+            data = self.wrapper.backend.read_data1(self.AverageSlider.get())
 
     def toggle_process(self):
         self.start_button.config(state="disabled")
