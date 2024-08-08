@@ -12,7 +12,7 @@ class Spector:
 
         return nl.norm(self.intensities)
     
-    def dotProduct(self, spector: Spector):
+    def dotProduct(self, spector: "Spector"):
 
         return np.dot(self.intensities, spector.intensities)
 
