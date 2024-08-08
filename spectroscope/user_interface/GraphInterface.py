@@ -19,16 +19,16 @@ class GraphInterface(tk.Frame):
         self.dark_spectrum = None
         self.reference_spectrum = None
 
-    def set_spectre_positions(self, coord, index: int):
+    def set_spectre_positions(self, coord, option:str):
         self.intensity_pos = coord
         self.calculate_intensity_pos()
-        if index == 0:
+        if option == "Intensity":
             return
-        if index == 1:
+        if option == "Absorption":
             self.absorbance_pos = coord
             self.calculate_absorbance_pos()
             return
-        if index == 2:
+        if option == "Transmission":
             self.transmittance_pos = coord
             self.calculate_transmittance_pos()
 

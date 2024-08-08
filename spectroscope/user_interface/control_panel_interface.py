@@ -1,6 +1,7 @@
 import tkinter as tk
 import threading
 import numpy as np
+from tkinter import filedialog
 
 class ControlPanelInterface(tk.Frame):
     options = ["Intensity", "Absorption", "Transmission"]
@@ -16,8 +17,6 @@ class ControlPanelInterface(tk.Frame):
         self.AverageSlider = tk.Scale(self, from_=1, to=100,
                                       **self.style_dict["Scale"])
         self.AverageSlider.pack()
-        self.start_button = tk.Button(self, text="Start", command=self.toggle_process )
-        self.start_button.pack()
         self.running = False
         self.load_button = tk.Button(self, text="Load", command=self.load_func)
         self.load_button.pack()
@@ -26,9 +25,21 @@ class ControlPanelInterface(tk.Frame):
         self.Dark_spectrum_data = np.array([])
         self.restrict_data = np.array([])
 
+    def test_ds_rs(self):
+        data = self.wrapper.backend.read_data1(self.AverageSlider.get())
+        print("data")
+        print(data)
+        self.wrapper.graph.set_dark_spectrum(data)
+        data1 = self.wrapper.backend.read_data1(3)
+        print("data 1")
+        print(data1)
+        self.wrapper.graph.set_reference_spectrum(data1)
+
     def long_running_process(self):
         while self.running:
             data = self.wrapper.backend.read_data1(self.AverageSlider.get())
+            self.wrapper.graph.set_spectre_positions(data, self.selected_option)
+            self.wrapper.graph.show_graph()
 
     def on_choice(self):
         choice = self.var.get()
@@ -43,6 +54,7 @@ class ControlPanelInterface(tk.Frame):
             radio.pack(anchor=tk.E, side=tk.TOP, pady=10)
 
     def toggle_process(self):
+        self.test_ds_rs()
         self.start_button.config(state="disabled")
 
         cooldown_period = 500  # 0.5 second
@@ -61,7 +73,7 @@ class ControlPanelInterface(tk.Frame):
         self.root.after(cooldown_period, lambda: self.start_button.config(state="normal"))
 
     def load_func(self): 
-        the_file = tk.askopenfilename(  # Open explorer
+        the_file = filedialog.askopenfilename(  # Open explorer
             title = "Select a .csv file",  
             filetypes = (("CSV Files","*.csv"),) # File type only csv
             )  

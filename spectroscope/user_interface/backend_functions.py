@@ -2,6 +2,7 @@ import serial
 import struct
 from time import sleep
 import numpy as np
+import random
 
 
 class Backend:
@@ -16,19 +17,7 @@ class Backend:
         self.wrapper = wrapper
 
     def read_data1(self, number_of_instances):
-        print(number_of_instances)
-        custom_data = np.array([
-            [1, 10],
-            [2, 20],
-            [3, 15],
-            [4, 25],
-            [5, 30],
-            [6, 18],
-            [7, 22],
-            [8, 28],
-            [9, 24],
-            [10, 30]
-        ])
+        custom_data = np.array([(i, random.randint(1, 480)) for i in range(1, 10)])
         return custom_data
 
     def read_data(self, number_of_instances):
