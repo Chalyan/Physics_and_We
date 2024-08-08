@@ -1,9 +1,9 @@
 import tkinter as tk
+import os
+import csv
 import threading
 from tkinter import filedialog
 import csv
-
-
 
 class ControlPanelInterface(tk.Frame):
     def __init__(self, parent, wrapper,style_dict):
@@ -22,6 +22,22 @@ class ControlPanelInterface(tk.Frame):
         self.status_label.pack(padx=20,pady=5,fill=tk.X)
         self.load_button = tk.Button(self, text="Load", command=self.load_func)
         self.load_button.pack()
+        self.save_button = tk.Button(self, text = "Save", command = self.save)
+        self.save_button.pack()
+    
+    def saves_file_path(self):
+        return tk.filedialog.asksaveasfilename(  
+            title = "Give a .csv file name",  
+            filetypes = [("Only csv files", "*.csv")]  
+            )
+    
+    def save(self):
+        path = tk.filedialog.asksaveasfilename(  
+            title = "Give a .csv file name",  
+            filetypes = [("Only csv files", "*.csv")]  
+            )
+        data_frame = self.wrapper.graph.get_positions_frame()
+        data_frame.to_csv(path, index=False)
 
 
     def long_running_process(self):
