@@ -1,40 +1,60 @@
 import tkinter as tk
-from tkinter import ttk
+import threading
+
+
 
 class ControlPanelInterface(tk.Frame):
-    global options
-    options= ["Intensity", "Absorbance", "Transmittance"]
-    def __init__(self, parent, style_dict):
+    options = ["Intensity", "Absorption", "Transmission"]
+    def __init__(self, parent, wrapper,style_dict):
+
         tk.Frame.__init__(self, parent, bg="green")
         self.root = parent
         self.style_dict = style_dict
+        self.wrapper = wrapper
         self.add_listener_()
-        self._radiobutton_observers = []
-        self._selected_option = None
+        self.selected_option = None
+        self.AverageSlider = tk.Scale(self, from_=1, to=100,
+                                      **self.style_dict["Scale"])
+        self.AverageSlider.pack()
+        self.start_button = tk.Button(self, text="Start", command=self.toggle_process )
+        self.start_button.pack()
+        self.running = False  # Assume the process is not running at the beginning
 
-    def add_listener_(self):
-        self.var = tk.StringVar(value=options[0])
 
-        for option in options:
-            radio = tk.Radiobutton(self.root, text=option, variable=self.var, value=option, command=self.on_choice)
-            radio.pack(anchor=tk.E)
-
-    @property
-    def selected_option(self):
-        return self._selected_option
-
-    @selected_option.setter
-    def selected_option(self, value):
-        self._selected_option = value
-        for callback in self._radiobutton_observers:
-            print(value)
-            callback(self._selected_option)
+    def long_running_process(self):
+        while self.running:
+            print("..........")
 
     def on_choice(self):
         choice = self.var.get()
-        self.selected_option(choice)
+        self.selected_option = choice
 
 
-    def bind_to(self, callback):
-        self._radiobutton_observers.append(callback)
 
+    def add_listener_(self):
+        self.var = tk.StringVar(value=self.options[0])
+        i = 0
+        for option in self.options:
+            radio = tk.Radiobutton(self.root, text=option, variable=self.var, value=option, command=self.on_choice)
+            radio.pack(anchor=tk.E, side=tk.TOP, pady=10)
+
+
+
+    #  start or stop the process
+    def toggle_process(self):
+
+        # Disable the button
+        self.start_button.config(state="disabled")
+
+        # Cooldown
+        cooldown_period = 500  # 0.5 second
+
+        if not self.running:
+            self.running = True  # Start the process
+            self.start_button["text"] = "Stop"
+            threading.Thread(target=self.long_running_process, daemon=True).start()
+        else:
+            self.running = False  # Stop the process
+            self.start_button["text"] = "Start"
+
+        self.root.after(cooldown_period, lambda: self.start_button.config(state="normal"))
