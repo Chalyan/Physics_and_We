@@ -5,9 +5,13 @@ import threading
 
 class ControlPanelInterface(tk.Frame):
     def __init__(self, parent, style_dict):
+
         tk.Frame.__init__(self, parent, bg="green")
         self.root = parent
         self.style_dict = style_dict
+        self.AverageSlider = tk.Scale(self, from_=1, to=100,
+                                      **self.style_dict["Scale"])
+        self.AverageSlider.pack()
         self.start_button = tk.Button(self, text="Start", command=self.toggle_process )
         self.start_button.pack()
         self.measure_once_button=tk.Button(self, text="Measure once", command=self.start_device, state=tk.DISABLED)
@@ -20,7 +24,6 @@ class ControlPanelInterface(tk.Frame):
     def measure_background(self):
         self.status_label.config(text="Measuring background...")
         self.update()
-
         self.status_label.config(text="Background measurement complete.")
         self.measure_once_button.config(state=tk.NORMAL)
         self.running = False
