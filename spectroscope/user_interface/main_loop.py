@@ -8,11 +8,12 @@ import numpy as np
 
 class SpectroscopeUI:
     def __init__(self, style_dict: Dict):
-        self.backend = Backend(port= "COM3", baudrate=9600, stopbit=1)
+        self.backend = Backend(port="COM3", baudrate=9600, stopbit=1)
         self.root = tk.Tk()
         self.root.title("YSO_spectroscope")
         self.style_dict = style_dict
-        self.control_panel = ControlPanelInterface(self.root,self , self.style_dict).place(relx=0.7, relwidth=0.3, relheight=1.0)
+        self.control_panel = (ControlPanelInterface(self.root, self , self.style_dict))
+        self.control_panel.place(relx=0.7, relwidth=0.3, relheight=1.0)
         graph_frame = tk.Frame(self.root)
         self.graph = GraphInterface(self.root, self,graph_frame)
         self.graph.graph_frame.place(relwidth=0.7, relheight=1.0)
@@ -34,14 +35,16 @@ if __name__ == "__main__":
         [10, 30]
     ])
 
-    dark_spectrum = np.array([[pos[0], pos[1] - 4] for pos in custom_data])
-    spectroscope.graph.set_dark_spectrum(dark_spectrum)
-
     dark_spectrum = np.array([[pos[0], pos[1] - 2] for pos in custom_data])
     spectroscope.graph.set_dark_spectrum(dark_spectrum)
 
-    spectroscope.graph.set_spectre_positions(custom_data, 0)
+    reference_spectrum = np.array([[pos[0], pos[1] - 2] for pos in custom_data])
+    spectroscope.graph.set_reference_spectrum(reference_spectrum)
+
+    spectroscope.graph.set_spectre_positions(custom_data, spectroscope.control_panel.selected_option)
     spectroscope.graph.show_graph()
+
+
 
     # Helper method for processing the choice of a radio button.
 

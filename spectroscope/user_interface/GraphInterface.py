@@ -4,13 +4,20 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 import numpy as np
 
+
 class GraphInterface(tk.Frame):
-    def __init__(self, parent,wrapper ,graph_frame):
+    def __init__(self, parent, wrapper,graph_frame):
         tk.Frame.__init__(self, parent, graph_frame)
         self.parent = parent
         self.wrapper = wrapper
         self.graph_frame = graph_frame
         self.canvas = None
+
+        self.intensity_pos = None
+        self.absorbance_pos = None
+        self.transmittance_pos = None
+        self.dark_spectrum = None
+        self.reference_spectrum = None
 
     def set_spectre_positions(self, coord, index: int):
         self.intensity_pos = coord
@@ -37,11 +44,11 @@ class GraphInterface(tk.Frame):
     def set_dark_spectrum(self, noise: np.ndarray):
         self.dark_spectrum = noise
 
-    def get_reference_spectrum(self, refNoise: np.ndarray):
+    def set_reference_spectrum(self, refNoise: np.ndarray):
         self.reference_spectrum = refNoise
         self.reference_spectrum[:, 1] -= self.dark_spectrum[:, 1]
 
-    def get_positions_csv(self):
+    def get_positions_frame(self):
         return pd.DataFrame(self.coordinate)
 
     def load_graph(self, csv_file: str):
@@ -53,8 +60,15 @@ class GraphInterface(tk.Frame):
         return data
 
     def show_graph(self):
-        x_point = self.intensity_pos[:, 0]
-        y_point = self.intensity_pos[:, 1]
+        pos_options = {
+            "Intensity": self.intensity_pos,
+            "Absorption": self.absorbance_pos,
+            "Transmission": self.transmittance_pos
+        }
+        option = self.wrapper.control_panel.selected_option
+        pos = pos_options.get(option)
+        x_point = pos[:, 0]
+        y_point = pos[:, 1]
 
         fig = Figure(figsize=(5, 4), dpi=100)
         ax = fig.add_subplot(111)
