@@ -1,9 +1,11 @@
 import tkinter as tk
 import numpy as np
 from tkinter import filedialog
+
+
 class ControlPanelInterface(tk.Frame):
     options = ["Intensity", "Absorption", "Transmission"]
-    def __init__(self, parent, wrapper,style_dict):
+    def __init__(self, parent, wrapper ,style_dict):
         tk.Frame.__init__(self, parent, bg="green")
         self.root = parent
         self.style_dict = style_dict
@@ -20,10 +22,24 @@ class ControlPanelInterface(tk.Frame):
         self.load_button.pack()
         self.DetectSolution = tk.Button(self, text="Detect Solution",**self.style_dict["Button"] ,command=self.detect_solution)
         self.DetectSolution.pack()
-
-        # Initialize arrays to store the data
+        self.save_button = tk.Button(self, text = "Save", command = self.save)
+        self.save_button.pack()
         self.Dark_spectrum_data = np.array([])
         self.restrict_data = np.array([])
+    
+    def saves_file_path(self):
+        return tk.filedialog.asksaveasfilename(  
+            title = "Give a .csv file name",  
+            filetypes = [("Only csv files", "*.csv")]  
+            )
+    
+    def save(self):
+        path = tk.filedialog.asksaveasfilename(  
+            title = "Give a .csv file name",  
+            filetypes = [("Only csv files", "*.csv")]  
+            )
+        data_frame = self.wrapper.graph.get_positions_frame()
+        data_frame.to_csv(path, index=False)
 
     def test_ds_rs(self):
         custom_data = np.array([
