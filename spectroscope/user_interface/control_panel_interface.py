@@ -1,8 +1,6 @@
 import tkinter as tk
-import threading
 import numpy as np
 from tkinter import filedialog
-
 class ControlPanelInterface(tk.Frame):
     options = ["Intensity", "Absorption", "Transmission"]
     def __init__(self, parent, wrapper,style_dict):
@@ -226,11 +224,14 @@ class ControlPanelInterface(tk.Frame):
         y_pos_list = list(y_pos)
         #minchev chpusheq chem gre exav
 
-    def long_running_process(self):
-        while self.running:
+    def long_running_process_step(self):
+        if self.running:
+            # Perform one step of the long-running process
             data = self.wrapper.backend.read_data1(self.AverageSlider.get())
             self.wrapper.graph.set_spectre_positions(data, self.selected_option)
             self.wrapper.graph.show_graph()
+
+
 
     def on_choice(self):
         choice = self.var.get()
@@ -250,19 +251,17 @@ class ControlPanelInterface(tk.Frame):
         cooldown_period = 500  # 0.5 second
 
         if not self.running:
-
             self.running = True
             self.start_button["text"] = "Stop"
-            threading.Thread(target=self.long_running_process, daemon=True).start()
-
+            self.long_running_process_step()
         else:
             self.running = False
             self.start_button["text"] = "Start"
 
-
         self.root.after(cooldown_period, lambda: self.start_button.config(state="normal"))
 
-    def load_func(self): 
+
+    def load_func(self):
         the_file = filedialog.askopenfilename(  # Open explorer
             title = "Select a .csv file",  
             filetypes = (("CSV Files","*.csv"),) # File type only csv
