@@ -14,11 +14,6 @@ class ControlPanelInterface(tk.Frame):
         self.start_button = tk.Button(self, text="Start", command=self.toggle_process)
         self.start_button.pack(pady=10)
 
-        # Initialize save buttons (hidden initially)
-        self.save_button1 = tk.Button(self, text="Save Dark Spectrum", state=tk.DISABLED,
-                                      command=self.save_dark_spectrum_data)
-        self.save_button2 = tk.Button(self, text="Save Reference Spectrum Data", state=tk.DISABLED,
-                                      command=self.save_restrict_data)
         self.AverageSlider = tk.Scale(self, from_=1, to=100,
                                       **self.style_dict["Scale"])
         self.AverageSlider.pack()
@@ -36,7 +31,7 @@ class ControlPanelInterface(tk.Frame):
 
     def long_running_process(self):
         while self.running:
-            data = self.graph.get_data()
+            data = self.wrapper.backend.read_data()
             print("Acquiring data:", data)
 
     def toggle_process(self):
@@ -50,27 +45,13 @@ class ControlPanelInterface(tk.Frame):
             self.start_button["text"] = "Stop"
             threading.Thread(target=self.long_running_process, daemon=True).start()
 
-            self.save_button1.pack()
-            self.save_button2.pack()
-            self.save_button1.config(state=tk.NORMAL)
-            self.save_button2.config(state=tk.NORMAL)
         else:
             self.running = False
             self.start_button["text"] = "Start"
 
-            self.save_button1.config(state=tk.NORMAL)
-            self.save_button2.config(state=tk.NORMAL)
 
         self.root.after(cooldown_period, lambda: self.start_button.config(state="normal"))
-    def save_dark_spectrum_data(self):
-        new_data = self.graph.get_data()
-        self.Dark_spectrum_data = np.append(self.Dark_spectrum_data, new_data)
-        print("Dark Spectrum data saved:", self.Dark_spectrum_data)
 
-    def save_restrict_data(self):
-        new_data = self.graph.get_data()
-        self.restrict_data = np.append(self.restrict_data, new_data)
-        print("Restrict data saved:", self.restrict_data)
     def load_func(self): 
         the_file = tk.askopenfilename(  # Open explorer
             title = "Select a .csv file",  
