@@ -1,1 +1,1 @@
-zip_file_path: /home/vahan/Physics_and_We/salt.zip
+zip_file_path: 
