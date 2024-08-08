@@ -17,10 +17,9 @@ class SpectroscopeUI:
         self.control_panel = ControlPanelInterface(self.root, self.style_dict, self.backend)
         self.control_panel.place(relx=0.7, relwidth=0.3, relheight=1.0)
 
-
 if __name__ == "__main__":
     with open("default_style.json", "r") as f:
         style_dict = json.load(f)
-    spectroscope = SpectroscopeUI(style_dict)  # Pass the loaded style_dict to the UI
+    spectroscope = SpectroscopeUI(style_dict)
 
     spectroscope.root.mainloop()
