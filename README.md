@@ -34,7 +34,10 @@ This project provides tools for analyzing spectrometric data, including:
 To get started with this project, clone the repository and install the required Python packages:
 
 ```bash
-
+git clone git@github.com:Chalyan/Physics_and_We.git
+cd Physics_and_We/
+python -m pip install -r requirements.txt
+python main_loop.py
 ```
 
 ## Usage
