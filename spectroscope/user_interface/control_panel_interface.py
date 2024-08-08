@@ -27,11 +27,12 @@ class ControlPanelInterface(tk.Frame):
             filetypes = [("Only csv files", "*.csv")]  
             )
     
-    def save(self, data_frame):
+    def save(self):
         path = tk.filedialog.asksaveasfilename(  
             title = "Give a .csv file name",  
             filetypes = [("Only csv files", "*.csv")]  
             )
+        data_frame = self.wrapper.graph.get_positions_frame()
         data_frame.to_csv(path, index=False)
 
 
