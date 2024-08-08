@@ -9,7 +9,8 @@ class ControlPanelInterface(tk.Frame):
         self.root = parent
         self.style_dict = style_dict
         self.add_listener_()
-        self._observers = []
+        self._radiobutton_observers = []
+        self._selected_option = None
 
     def add_listener_(self):
         self.var = tk.StringVar(value=options[0])
@@ -18,12 +19,22 @@ class ControlPanelInterface(tk.Frame):
             radio = tk.Radiobutton(self.root, text=option, variable=self.var, value=option, command=self.on_choice)
             radio.pack(anchor=tk.E)
 
+    @property
+    def selected_option(self):
+        return self._selected_option
+
+    @selected_option.setter
+    def selected_option(self, value):
+        self._selected_option = value
+        for callback in self._radiobutton_observers:
+            print(value)
+            callback(self._selected_option)
+
     def on_choice(self):
-        selected_option = self.var.get()
-        print(f"Selected option: {selected_option}")
-        for callback in self._observers:
-            callback(selected_option)
+        choice = self.var.get()
+        self.selected_option(choice)
+
 
     def bind_to(self, callback):
-        self._observers.append(callback)
+        self._radiobutton_observers.append(callback)
 

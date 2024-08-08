@@ -11,8 +11,13 @@ class SpectroscopeUI:
         self.root = tk.Tk()
         self.root.title("YSO_spectroscope")
         self.style_dict = style_dict
-        self.control_panel = ControlPanelInterface(self.root, self.style_dict).place(relx=0.7, relwidth=0.3, relheight=1.0)
+        self.control_panel = (ControlPanelInterface(self.root, self.style_dict))
+        self.control_panel.place(relx=0.7, relwidth=0.3, relheight=1.0)
 
+        self.control_panel.bind_to(self.on_option_change)
+
+    def on_option_change(self, selected):
+        print(f"Selected Option: {selected}")
 
 if __name__ == "__main__":
 
