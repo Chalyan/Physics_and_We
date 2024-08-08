@@ -50,8 +50,8 @@ Spectrometric data should be provided in files containing wavelength and intensi
 
 By plotting the CSV file in Python, you can create graphs for individual measurements or for all the measurements combined, as shown below:
 
-<insert pictures>
-
+![Single Measurement Graph](https://1drv.ms/i/c/fa29c560b9486bc9/Efun5w_zg2JLqHvDY-zALIEBm5E1qGP1cPBuNejpbMzmQg?e=QxU2hV)
+![Multiple Measurement Graph](https://1drv.ms/i/c/fa29c560b9486bc9/ETiftl23ZsRJgUrICjwj3sgBY7Ls8iiBua7ThKjZTmk3RA?e=bRsFmY)
 ### Vector Conversion and Subspace Creation
 
 This code can convert intensity measurements into vectors, simplify them using orthogonalization and create vector subspace using the orthogonal vectors
