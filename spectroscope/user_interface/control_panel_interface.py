@@ -4,11 +4,12 @@ import threading
 
 
 class ControlPanelInterface(tk.Frame):
-    def __init__(self, parent, style_dict):
+    def __init__(self, parent, wrapper,style_dict):
 
         tk.Frame.__init__(self, parent, bg="green")
         self.root = parent
         self.style_dict = style_dict
+        self.wrapper = wrapper
         self.AverageSlider = tk.Scale(self, from_=1, to=100,
                                       **self.style_dict["Scale"])
         self.AverageSlider.pack()
