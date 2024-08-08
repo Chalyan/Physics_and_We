@@ -1,5 +1,5 @@
 matplotlib
 pandas
-tkinter
+tk
 pyserial
 thread
