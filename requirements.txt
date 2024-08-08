@@ -2,4 +2,4 @@ matplotlib
 pandas
 tk
 pyserial
-thread
+
