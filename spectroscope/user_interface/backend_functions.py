@@ -1,5 +1,6 @@
 import serial
 import struct
+from time import sleep
 
 
 class Backend:
@@ -46,8 +47,21 @@ class Backend:
         return data_in_uint16
 
     def start_device(self):
-        self.ser.write(self.start_command)
+        return_value = b'0x00'
+        error_instances = 0
+        while return_value == b'0x00':
+            return_value = self.ser.write(self.start_command)
+            sleep(0.01)
+            error_instances += 1
+            if error_instances > 10:
+                break
 
     def stop_device(self):
-        self.ser.write(self.stop_command)
-
+        return_value = b'0x00'
+        error_instances = 0
+        while return_value == b'0x00':
+            return_value = self.ser.write(self.stop_command)
+            sleep(0.01)
+            error_instances += 1
+            if error_instances > 10:
+                break
