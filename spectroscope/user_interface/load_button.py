@@ -10,7 +10,6 @@ def openFile():
    with open(the_file, 'r') as csv_file:
       write = csv.writer(csv_file)
       file = csv_file.readlines()
-      print(file)
       
 window = Tk()
 
