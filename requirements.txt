@@ -3,3 +3,4 @@ pandas
 tk
 pyserial
 numpy
+scipy
