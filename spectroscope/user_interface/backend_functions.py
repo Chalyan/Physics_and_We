@@ -4,14 +4,15 @@ from time import sleep
 
 
 class Backend:
-    def __init__(self, port: str, baudrate: int):
+    def __init__(self, port: str, baudrate: int, wrapper: object):
         self.port = port
         self.baudrate = baudrate
         self.ser = serial.Serial('COM3', baudrate=self.baudrate, timeout=1)
         self.byte_length = 6000
-        self.start_command = b''
-        self.stop_command = b''
-        self.start_bytes = b''
+        self.start_command = b'0xa0b0'
+        self.stop_command = b'0xa1b1'
+        self.start_bytes = b'0xffa0'
+        self.wrapper = wrapper
 
     def read_data(self, number_of_instances):
 
