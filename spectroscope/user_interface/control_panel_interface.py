@@ -15,9 +15,10 @@ class ControlPanelInterface(tk.Frame):
             title = "Select a .csv file",  
             filetypes = (("CSV Files","*.csv"),) # File type only csv
             )  
-        with open(the_file, 'r') as file:
-            return csv.reader(file)
-        
+        with open(the_file, 'r') as csv_file:
+            file = csv_file.readlines()
+        return file            
+
 
 
 

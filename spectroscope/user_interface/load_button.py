@@ -7,9 +7,10 @@ def openFile():
       title = "Select a .csv file",  
       filetypes = (("CSV Files","*.csv"),) # File type only csv
       )  
-   with open(the_file, 'r') as file:
-      reader = csv.reader(file)
-      # Create graph TO DO
+   with open(the_file, 'r') as csv_file:
+      write = csv.writer(csv_file)
+      file = csv_file.readlines()
+      print(file)
       
 window = Tk()
 
