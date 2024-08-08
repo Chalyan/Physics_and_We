@@ -46,7 +46,7 @@ class GraphInterface(tk.Frame):
 
     def set_reference_spectrum(self, refNoise: np.ndarray):
         self.reference_spectrum = refNoise
-        self.reference_spectrum[:, 1] -= self.dark_spectrum[:, 1]
+        # self.reference_spectrum[:, 1] -= self.dark_spectrum[:, 1]
 
     def get_positions_frame(self):
         return pd.DataFrame(self.coordinate)
