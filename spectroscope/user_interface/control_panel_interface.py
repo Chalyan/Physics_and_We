@@ -2,6 +2,8 @@ import tkinter as tk
 import os
 import csv
 import threading
+from tkinter import filedialog
+import csv
 
 class ControlPanelInterface(tk.Frame):
     def __init__(self, parent, wrapper,style_dict):
@@ -18,6 +20,8 @@ class ControlPanelInterface(tk.Frame):
         self.running = False  # Assume the process is not running at the beginning
         self.status_label= tk.Label(self,text="Waiting for background measurement...",relief=tk.SUNKEN,anchor="w")
         self.status_label.pack(padx=20,pady=5,fill=tk.X)
+        self.load_button = tk.Button(self, text="Load", command=self.load_func)
+        self.load_button.pack()
         self.save_button = tk.Button(self, text = "Save", command = self.save)
         self.save_button.pack()
     
@@ -58,3 +62,13 @@ class ControlPanelInterface(tk.Frame):
             self.start_button["text"] = "Start"
 
         self.root.after(cooldown_period, lambda: self.start_button.config(state="normal"))
+
+    #   load file
+    def load_func(self): 
+        the_file = filedialog.askopenfilename(  # Open explorer
+            title = "Select a .csv file",  
+            filetypes = (("CSV Files","*.csv"),) # File type only csv
+            )  
+        with open(the_file, 'r') as file: 
+            csv_file = file.readlines()
+            self.wrapper.graph.loadGraph(csv_file)
