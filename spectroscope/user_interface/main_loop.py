@@ -4,7 +4,7 @@ from backend_functions import Backend
 from typing import Dict
 from control_panel_interface import ControlPanelInterface
 from GraphInterface import GraphInterface
-import  numpy as np
+import numpy as np
 
 class SpectroscopeUI:
     def __init__(self, style_dict: Dict):
@@ -14,7 +14,7 @@ class SpectroscopeUI:
         self.style_dict = style_dict
         self.control_panel = ControlPanelInterface(self.root,self , self.style_dict).place(relx=0.7, relwidth=0.3, relheight=1.0)
         graph_frame = tk.Frame(self.root)
-        self.graph = GraphInterface(self.root, graph_frame)
+        self.graph = GraphInterface(self.root, self,graph_frame)
         self.graph.graph_frame.place(relwidth=0.7, relheight=1.0)
 
 if __name__ == "__main__":
