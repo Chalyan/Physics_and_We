@@ -35,7 +35,7 @@ To get started with this project, clone the repository and install the required 
 
 ```bash
 git clone git@github.com:Chalyan/Physics_and_We.git
-cd Physics_and_We/user_interface
+cd Physics_and_We/spectroscope/user_interface
 python -m pip install -r requirements.txt
 python main_loop.py
 ```
