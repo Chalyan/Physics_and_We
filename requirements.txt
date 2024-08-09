@@ -1,6 +1,5 @@
 matplotlib
 pandas
-tk
 pyserial
 numpy
 scipy
