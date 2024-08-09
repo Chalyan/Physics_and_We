@@ -2,6 +2,7 @@ import csv
 import tkinter as tk
 import numpy as np
 from tkinter import filedialog
+import threading
 
 
 class ControlPanelInterface(tk.Frame):
@@ -32,13 +33,13 @@ class ControlPanelInterface(tk.Frame):
         self.Dark_spectrum_data = np.array([])
         self.restrict_data = np.array([])
         self.add_listener_()
-    
+
     def saves_file_path(self):
-        return tk.filedialog.asksaveasfilename(  
-            title = "Give a .csv file name",  
-            filetypes = [("Only csv files", "*.csv")]  
+        return tk.filedialog.asksaveasfilename(
+            title = "Give a .csv file name",
+            filetypes = [("Only csv files", "*.csv")]
             )
-    
+
     def save(self):
         path = filedialog.asksaveasfilename(
             title="Give a .csv file name",
@@ -54,8 +55,8 @@ class ControlPanelInterface(tk.Frame):
         #minchev chpusheq chem gre exav
 
     def long_running_process_step(self):
-        if self.running:
-            data = self.wrapper.backend.read_data1(self.AverageSlider.get())
+        while self.running:
+            data = self.wrapper.backend.inch_uzem_kenem(self.AverageSlider.get())
             if(self.is_first_data):
                 self.wrapper.graph.dark_spectrum = np.zeros((len(data), 2))
                 self.wrapper.graph.reference_spectrum = np.ones((len(data), 2))
@@ -83,10 +84,13 @@ class ControlPanelInterface(tk.Frame):
         if not self.running:
             self.running = True
             self.start_button["text"] = "Stop"
-            self.long_running_process_step()
+            self.wrapper.backend.start_device()
+            threading.Thread(target=self.long_running_process_step, daemon=True).start()
+            # self.long_running_process_step()
         else:
             self.running = False
             self.start_button["text"] = "Start"
+            self.wrapper.backend.stop_device()
 
         self.root.after(cooldown_period, lambda: self.start_button.config(state="normal"))
 
@@ -95,7 +99,8 @@ class ControlPanelInterface(tk.Frame):
         the_file = filedialog.askopenfilename(  # Open explorer
             title="Select a .csv file",
             filetypes=(("CSV Files","*.csv"),) # File type only csv
-            )  
+            )
+        print(the_file)
         with open(the_file, 'r') as file: 
             csv_file = file.readlines()
             self.wrapper.graph.load_graph(csv_file)

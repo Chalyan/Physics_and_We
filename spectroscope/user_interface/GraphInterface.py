@@ -12,6 +12,8 @@ class GraphInterface(tk.Frame):
         self.wrapper = wrapper
         self.graph_frame = graph_frame
         self.canvas = None
+        self.fig = Figure(figsize=(5, 4), dpi=100)
+        self.ax = self.fig.add_subplot(111)
 
         self.intensity_pos = None
         self.absorbance_pos = None
@@ -91,15 +93,15 @@ class GraphInterface(tk.Frame):
         pos = pos_options.get(option)
         x_point = pos[:, 0]
         y_point = pos[:, 1]
+        if self.ax:
+            self.ax.clear()
 
-        fig = Figure(figsize=(5, 4), dpi=100)
-        ax = fig.add_subplot(111)
+        self.ax.plot(x_point, y_point)
 
-        ax.plot(x_point, y_point)
 
-        if self.canvas:
-            self.canvas.get_tk_widget().destroy()
-        self.canvas = FigureCanvasTkAgg(fig, master=self.graph_frame)
+        if self.canvas is None:
+        #     self.canvas.get_tk_widget().destroy()
+            self.canvas = FigureCanvasTkAgg(self.fig, master=self.graph_frame)
         self.canvas.draw()
         self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
