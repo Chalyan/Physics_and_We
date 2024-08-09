@@ -4,7 +4,7 @@ import numpy as np
 import srcread
 from func import *
 
-sourcePaths = srcread.SRCRead('/Users/apple/Physics_and_We/source.txt') # your path to source.txt
+sourcePaths = srcread.SRCRead('C:\PythonProjects\Physics_and_We\source.txt') # your path to source.txt
 
 folder_path = sourcePaths.findPath('measurments_folder')  # Update with your folder path
 

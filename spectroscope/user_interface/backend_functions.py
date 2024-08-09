@@ -8,12 +8,15 @@ class Backend:
     def __init__(self, port: str, baudrate: int, wrapper: object):
         self.port = port
         self.baudrate = baudrate
-        self.ser = serial.Serial('COM7', baudrate=self.baudrate, timeout=1)
         self.byte_length = 7390
         self.start_command = b'\xa0\xb0'
         self.stop_command = b'\xa1\xb1'
         self.start_bytes = b'\xa0\xff'
         self.wrapper = wrapper
+        self.ser = None
+
+    def init_serial(self, ):
+        self.ser = serial.Serial(self.port, baudrate=self.baudrate, timeout=1)
 
     def read_from_device(self, number_of_instances):
         buffer = bytearray()

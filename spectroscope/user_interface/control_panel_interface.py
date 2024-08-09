@@ -96,6 +96,8 @@ class ControlPanelInterface(tk.Frame):
 
         if not self.running:
             self.running = True
+            if self.wrapper.backend.ser is None:
+                self.wrapper.backend.init_serial()
             self.start_button["text"] = "Stop"
             self.wrapper.backend.start_device()
             threading.Thread(target=self.long_running_process_step, daemon=True).start()
