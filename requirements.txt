@@ -1,0 +1,9 @@
+matplotlib
+pandas
+tk
+pyserial
+numpy
+<<<<<<< HEAD
+scipy
+=======
+>>>>>>> 74da96f
