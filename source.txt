@@ -1,1 +1,3 @@
-zip_file_path: 
+zip_file_path: /Users/eduard/Projects/Physics_and_We/pandw.zip
+spectras_csv_path: /Users/eduard/Projects/Physics_and_We/spectras.csv
+measurments_folder: /Users/eduard/Projects/Physics_and_We/pandw
