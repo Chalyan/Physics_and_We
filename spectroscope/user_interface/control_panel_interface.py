@@ -16,15 +16,16 @@ class ControlPanelInterface(tk.Frame):
         self.selected_option = self.options[0]
         self.AverageSlider = tk.Scale(self, from_=1, to=100,
                                       **self.style_dict["Scale"])
-        self.AverageSlider.pack()
         self.running = False
-        self.load_button = tk.Button(self, text="Load", command=self.load_func,**self.style_dict["Button"])
-        self.load_button.pack()
-        self.dark_spectrum_button = tk.Button(self, text="Dark Spectrum", command=self.dark_spectrum)
+        self.is_first_data = True
+        self.dark_spectrum_button = tk.Button(self, text="Dark Spectrum", command=self.dark_spectrum, **self.style_dict["Button"])
         self.dark_spectrum_button.pack()
+        self.AverageSlider.pack()
+        self.load_button = tk.Button(self, text="Load", command=self.load_func, **self.style_dict["Button"])
+        self.load_button.pack()
         self.DetectSolution = tk.Button(self, text="Detect Solution",**self.style_dict["Button"] ,command=self.detect_solution)
         self.DetectSolution.pack()
-        self.save_button = tk.Button(self, text = "Save", command=self.save,**self.style_dict["Button"])
+        self.save_button = tk.Button(self, text="Save", command=self.save,**self.style_dict["Button"])
         self.save_button.pack()
         self.Dark_spectrum_data = np.array([])
         self.restrict_data = np.array([])
@@ -45,101 +46,10 @@ class ControlPanelInterface(tk.Frame):
         data_frame.to_csv(path, index=False)
 
     def test_ds_rs(self):
-        custom_data = np.array([
-            [457.21, -9.716],
-            [457.80, -9.692],
-            [458.38, -9.598],
-            [458.96, -9.736],
-            [459.55, -9.860],
-            [460.13, -10.310],
-            [460.71, -9.974],
-            [461.30, -10.394],
-            [461.88, -10.363],
-            [462.46, -11.554],
-            [463.05, -11.309],
-            [463.63, -11.764],
-            [464.21, -11.530],
-            [464.79, -11.219],
-            [465.38, -10.628],
-            [465.96, -10.322],
-            [466.54, -10.022],
-            [467.13, -9.707],
-            [467.71, -9.809],
-            [468.29, -9.303],
-            [468.87, -9.419],
-            [469.46, -9.891],
-            [470.04, -10.034],
-            [470.62, -9.694],
-            [471.21, -8.869],
-            [471.79, -9.471],
-            [472.37, -9.560],
-            [472.95, -9.659],
-            [473.54, -9.600],
-            [474.12, -9.994],
-            [474.70, -10.143],
-            [475.28, -10.593],
-            [475.87, -10.604],
-            [476.45, -10.772],
-            [477.03, -10.919],
-            [477.61, -10.119],
-            [478.19, -10.096],
-            [478.78, -9.834],
-            [479.36, -10.049],
-            [479.94, -10.152],
-            [480.52, -10.081],
-            [481.11, -9.497],
-            [481.69, -9.633],
-            [482.27, -9.309],
-            [482.85, -9.666],
-            [483.43, -10.091],
-            [484.01, -9.917],
-            [484.60, -10.426],
-            [485.18, -10.287],
-            [485.76, -11.106],
-            [486.34, -11.430],
-            [486.92, -11.154],
-            [487.51, -10.843],
-            [488.09, -10.891],
-            [488.67, -10.782],
-            [489.25, -10.878],
-            [489.83, -11.118],
-            [490.41, -11.034],
-            [490.99, -12.047],
-            [491.58, -12.211],
-            [492.16, -11.538],
-            [492.74, -11.268],
-            [493.32, -11.003],
-            [493.90, -10.806],
-            [494.48, -10.096],
-            [495.06, -9.768],
-            [495.64, -10.148],
-            [496.23, -10.811],
-            [496.81, -11.120],
-            [497.39, -10.509],
-            [497.97, -10.319],
-            [498.55, -10.496],
-            [499.13, -10.903],
-            [499.71, -10.563],
-            [500.29, -9.772],
-            [500.87, -9.428],
-            [501.45, -9.198],
-            [502.03, -9.066],
-            [502.61, -8.466],
-            [503.20, -8.239],
-            [503.78, -8.826],
-            [504.36, -8.149],
-            [504.94, -7.476],
-            [505.52, -6.528],
-            [506.10, -7.082],
-            [506.68, -6.737],
-            [507.26, -6.976],
-            [507.84, -6.280],
-
-        ])
         # data = self.wrapper.backend.read_data1(self.AverageSlider.get())
         # print("data")
         # print(data)
-        self.wrapper.graph.set_dark_spectrum(custom_data)
+        # self.wrapper.graph.set_dark_spectrum(custom_data)
         # data1 = self.wrapper.backend.read_data1(3)
         # print("data 1")
         # print(data1)
@@ -247,6 +157,11 @@ class ControlPanelInterface(tk.Frame):
         if self.running:
             # Perform one step of the long-running process
             data = self.wrapper.backend.read_data1(self.AverageSlider.get())
+            if(self.is_first_data):
+                self.wrapper.graph.dark_spectrum = np.zeros((len(data), 2))
+                self.wrapper.graph.reference_spectrum = np.ones((len(data), 2))
+                self.is_first_data = False
+
             self.wrapper.graph.set_spectre_positions(data, self.selected_option)
             self.wrapper.graph.show_graph()
 
@@ -290,4 +205,5 @@ class ControlPanelInterface(tk.Frame):
             self.wrapper.graph.load_graph(csv_file)
 
     def dark_spectrum(self):
-        self.wrapper.graph.set_dark_spectrum()
+        pos = self.wrapper.backend.read_data1(3)
+        self.wrapper.graph.set_dark_spectrum(pos)

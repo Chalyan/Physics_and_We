@@ -43,6 +43,7 @@ class GraphInterface(tk.Frame):
 
     def set_dark_spectrum(self, noise: np.ndarray):
         self.dark_spectrum = noise
+        print(self.dark_spectrum)
 
     def set_reference_spectrum(self, refNoise: np.ndarray):
         self.reference_spectrum = refNoise
