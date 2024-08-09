@@ -20,6 +20,8 @@ class ControlPanelInterface(tk.Frame):
         self.running = False
         self.load_button = tk.Button(self, text="Load", command=self.load_func,**self.style_dict["Button"])
         self.load_button.pack()
+        self.dark_spectrum_button = tk.Button(self, text="Dark Spectrum", command=self.dark_spectrum)
+        self.dark_spectrum_button.pack()
         self.DetectSolution = tk.Button(self, text="Detect Solution",**self.style_dict["Button"] ,command=self.detect_solution)
         self.DetectSolution.pack()
         self.save_button = tk.Button(self, text = "Save", command=self.save,**self.style_dict["Button"])
@@ -286,3 +288,6 @@ class ControlPanelInterface(tk.Frame):
         with open(the_file, 'r') as file: 
             csv_file = file.readlines()
             self.wrapper.graph.load_graph(csv_file)
+
+    def dark_spectrum(self):
+        self.wrapper.graph.set_dark_spectrum()
