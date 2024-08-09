@@ -39,11 +39,11 @@ class GraphInterface(tk.Frame):
         self.absorbance_pos[:, 1] = np.log(self.intensity_pos[:, 1] / self.reference_spectrum[:, 1])
 
     def calculate_intensity_pos(self):
-        self.intensity_pos[:, 1] -= self.dark_spectrum[:, 1]
+        self.intensity_pos[:, 1] = self.intensity_pos[:, 1].astype(np.float64) - self.dark_spectrum[:, 1]
+
 
     def set_dark_spectrum(self, noise: np.ndarray):
         self.dark_spectrum = noise
-        print(self.dark_spectrum)
 
     def set_reference_spectrum(self, refNoise: np.ndarray):
         self.reference_spectrum = refNoise
@@ -56,7 +56,6 @@ class GraphInterface(tk.Frame):
             "Absorption": self.absorbance_pos,
             "Transmission": self.transmittance_pos
         }
-        print(option)
         pos = pos_options.get(option)
         header = ["WaveLength Nm", option]
 
