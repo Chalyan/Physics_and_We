@@ -34,6 +34,15 @@ class GraphInterface(tk.Frame):
             self.transmittance_pos = coord
             self.calculate_transmittance_pos()
 
+    def get_pos_options(self, option):
+        option = self.wrapper.control_panel.selected_option
+        pos_options = {
+            "Intensity": self.intensity_pos,
+            "Absorption": self.absorbance_pos,
+            "Transmission": self.transmittance_pos
+        }
+        return pos_options.get(option)
+
     def calculate_transmittance_pos(self):
         self.transmittance_pos[:, 1] = np.log(1 - self.intensity_pos[:, 1] / self.reference_spectrum[:, 1])
 

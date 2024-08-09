@@ -4,7 +4,7 @@ import numpy as np
 import srcread
 from func import *
 
-sourcePaths = srcread.SRCRead('') # your path to source.txt
+sourcePaths = srcread.SRCRead('/Users/apple/Physics_and_We/source.txt') # your path to source.txt
 
 folder_path = sourcePaths.findPath('measurments_folder')  # Update with your folder path
 
@@ -33,16 +33,17 @@ def getSolution(b_vec):
     spec_x = np.array(b_vec)
 
     C = np.arange(1, 11) * 0.023 #267, 514
+    p1 = 267
+    p2 = 514
 
-
-    peak_b = blue[:, 514]
-    peak_r = red[:, 267]
+    peak_b = blue[:, p2]
+    peak_r = red[:, p1]
 
     coef_r = np.polyfit(peak_r,C,1)
     coef_b = np.polyfit(peak_b,C,1)
 
     fit_r = np.poly1d(coef_r)
     fit_b = np.poly1d(coef_b)
-    R, B = spec_x[[267, 514]]
+    R, B = spec_x[[p1, p2]] #
 
     return fit_r(R), fit_b(B)

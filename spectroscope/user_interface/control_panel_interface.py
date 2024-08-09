@@ -3,6 +3,7 @@ import tkinter as tk
 import numpy as np
 from tkinter import filedialog
 import threading
+import getConcentration
 
 
 class ControlPanelInterface(tk.Frame):
@@ -33,6 +34,10 @@ class ControlPanelInterface(tk.Frame):
         self.Dark_spectrum_data = np.array([])
         self.restrict_data = np.array([])
         self.add_listener_()
+        self.result = tk.StringVar()
+        self.result.set("Result: ")
+        label = tk.Label(self, textvariable=self.result)
+        label.pack(pady=10)
 
     def saves_file_path(self):
         return tk.filedialog.asksaveasfilename(
@@ -49,14 +54,20 @@ class ControlPanelInterface(tk.Frame):
         data_frame.to_csv(path, index=False)
 
     def detect_solution(self):
-        pos = self.wrapper.graph.pos_options.get(self.selected_option)
+        pos = self.wrapper.graph.get_pos_options(self.selected_option)
         y_pos = pos[:, 1]
         y_pos_list = list(y_pos)
-        #minchev chpusheq chem gre exav
+        red, blue = getConcentration.getSolution(y_pos_list)
+        value = self.result.get()
+        res = f'{value} Red: {red} Blue: {blue}'
+        self.result.set(res)
+
+
 
     def long_running_process_step(self):
         while self.running:
-            data = self.wrapper.backend.inch_uzem_kenem(self.AverageSlider.get())
+            #change backend method
+            data = self.wrapper.backend.random_generator(self.AverageSlider.get())
             if(self.is_first_data):
                 self.wrapper.graph.dark_spectrum = np.zeros((len(data), 2))
                 self.wrapper.graph.reference_spectrum = np.ones((len(data), 2))
@@ -106,9 +117,11 @@ class ControlPanelInterface(tk.Frame):
             self.wrapper.graph.load_graph(csv_file)
 
     def dark_spectrum(self):
+        # change backend method
         pos = self.wrapper.backend.read_data2()
         self.wrapper.graph.set_dark_spectrum(pos)
 
     def ref_button(self):
+        # change backend method
         pos = self.wrapper.backend.read_data3()
         self.wrapper.graph.set_reference_spectrum(pos)
