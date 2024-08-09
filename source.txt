@@ -1,1 +1,3 @@
 zip_file_path: 
+spectras_csv_path: 
+measurments_folder: 
