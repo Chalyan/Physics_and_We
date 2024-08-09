@@ -1,3 +1,4 @@
+import csv
 import tkinter as tk
 import numpy as np
 from tkinter import filedialog
@@ -12,7 +13,6 @@ class ControlPanelInterface(tk.Frame):
         self.wrapper = wrapper
         self.start_button = tk.Button(self, text="Start", command=self.toggle_process, **self.style_dict["Button"])
         self.start_button.pack(pady=10)
-        self.add_listener_()
         self.selected_option = self.options[0]
         self.AverageSlider = tk.Scale(self, from_=1, to=100,
                                       **self.style_dict["Scale"])
@@ -22,10 +22,11 @@ class ControlPanelInterface(tk.Frame):
         self.load_button.pack()
         self.DetectSolution = tk.Button(self, text="Detect Solution",**self.style_dict["Button"] ,command=self.detect_solution)
         self.DetectSolution.pack()
-        self.save_button = tk.Button(self, text = "Save", command = self.save)
+        self.save_button = tk.Button(self, text = "Save", command=self.save,**self.style_dict["Button"])
         self.save_button.pack()
         self.Dark_spectrum_data = np.array([])
         self.restrict_data = np.array([])
+        self.add_listener_()
     
     def saves_file_path(self):
         return tk.filedialog.asksaveasfilename(  
@@ -34,9 +35,9 @@ class ControlPanelInterface(tk.Frame):
             )
     
     def save(self):
-        path = tk.filedialog.asksaveasfilename(  
-            title = "Give a .csv file name",  
-            filetypes = [("Only csv files", "*.csv")]  
+        path = filedialog.asksaveasfilename(
+            title="Give a .csv file name",
+            filetypes=[("Only csv files", "*.csv")]
             )
         data_frame = self.wrapper.graph.get_positions_frame()
         data_frame.to_csv(path, index=False)
@@ -257,7 +258,7 @@ class ControlPanelInterface(tk.Frame):
         self.var = tk.StringVar(value=self.options[0])
         i = 0
         for option in self.options:
-            radio = tk.Radiobutton(self.root, text=option, variable=self.var, value=option, command=self.on_choice)
+            radio = tk.Radiobutton(self, text=option, variable=self.var, value=option, command=self.on_choice, **self.style_dict["Button"])
             radio.pack(anchor=tk.E, side=tk.TOP, pady=10)
 
     def toggle_process(self):
@@ -279,9 +280,9 @@ class ControlPanelInterface(tk.Frame):
 
     def load_func(self):
         the_file = filedialog.askopenfilename(  # Open explorer
-            title = "Select a .csv file",  
-            filetypes = (("CSV Files","*.csv"),) # File type only csv
+            title="Select a .csv file",
+            filetypes=(("CSV Files","*.csv"),) # File type only csv
             )  
         with open(the_file, 'r') as file: 
             csv_file = file.readlines()
-            self.wrapper.graph.loadGraph(csv_file)
+            self.wrapper.graph.load_graph(csv_file)

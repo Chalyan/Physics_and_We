@@ -20,7 +20,7 @@ class SpectroscopeUI:
         self.graph.graph_frame.place(relwidth=0.7, relheight=1.0)
 
         # Initialize the control panel interface and pass the backend to it
-        self.control_panel = ControlPanelInterface(self.root,self , self.style_dict)
+        self.control_panel = ControlPanelInterface(self.root,self, self.style_dict)
         self.control_panel.place(relx=0.7, relwidth=0.3, relheight=1.0)
 
 if __name__ == "__main__":
