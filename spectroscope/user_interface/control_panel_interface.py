@@ -1,4 +1,3 @@
-import csv
 import tkinter as tk
 import numpy as np
 from tkinter import filedialog
@@ -8,7 +7,8 @@ import getConcentration
 
 class ControlPanelInterface(tk.Frame):
     options = ["Intensity", "Absorption", "Transmission"]
-    def __init__(self, parent, wrapper ,style_dict):
+
+    def __init__(self, parent, wrapper, style_dict):
         tk.Frame.__init__(self, parent, bg="green")
         self.root = parent
         self.style_dict = style_dict
@@ -21,15 +21,18 @@ class ControlPanelInterface(tk.Frame):
         self.AverageSlider.pack()
         self.running = False
         self.is_first_data = True
-        self.dark_spectrum_button = tk.Button(self, text="Dark Spectrum", command=self.dark_spectrum, **self.style_dict["Button"])
+        self.dark_spectrum_button = tk.Button(self, text="Dark Spectrum", command=self.dark_spectrum,
+                                              **self.style_dict["Button"])
         self.dark_spectrum_button.pack()
-        self.reference_button = tk.Button(self, text="Reference Spectrum", command=self.ref_button, **self.style_dict["Button"])
+        self.reference_button = tk.Button(self, text="Reference Spectrum", command=self.ref_button,
+                                          **self.style_dict["Button"])
         self.reference_button.pack()
         self.load_button = tk.Button(self, text="Load", command=self.load_func, **self.style_dict["Button"])
         self.load_button.pack()
-        self.DetectSolution = tk.Button(self, text="Detect Solution",**self.style_dict["Button"] ,command=self.detect_solution)
+        self.DetectSolution = tk.Button(self, text="Detect Solution", **self.style_dict["Button"],
+                                        command=self.detect_solution)
         self.DetectSolution.pack()
-        self.save_button = tk.Button(self, text="Save", command=self.save,**self.style_dict["Button"])
+        self.save_button = tk.Button(self, text="Save", command=self.save, **self.style_dict["Button"])
         self.save_button.pack()
         self.Dark_spectrum_data = np.array([])
         self.restrict_data = np.array([])
@@ -38,18 +41,20 @@ class ControlPanelInterface(tk.Frame):
         self.result.set("Result: ")
         label = tk.Label(self, textvariable=self.result)
         label.pack(pady=10)
+        self.var = None
 
-    def saves_file_path(self):
+    @staticmethod
+    def saves_file_path():
         return tk.filedialog.asksaveasfilename(
-            title = "Give a .csv file name",
-            filetypes = [("Only csv files", "*.csv")]
-            )
+            title="Give a .csv file name",
+            filetypes=[("Only csv files", "*.csv")]
+        )
 
     def save(self):
         path = filedialog.asksaveasfilename(
             title="Give a .csv file name",
             filetypes=[("Only csv files", "*.csv")]
-            )
+        )
         data_frame = self.wrapper.graph.get_positions_frame()
         data_frame.to_csv(path, index=False)
 
@@ -62,13 +67,10 @@ class ControlPanelInterface(tk.Frame):
         res = f'{value} Red: {red} Blue: {blue}'
         self.result.set(res)
 
-
-
     def long_running_process_step(self):
         while self.running:
-            #change backend method
-            data = self.wrapper.backend.random_generator(self.AverageSlider.get())
-            if(self.is_first_data):
+            data = self.wrapper.backend.read_data(self.AverageSlider.get())
+            if self.is_first_data:
                 self.wrapper.graph.dark_spectrum = np.zeros((len(data), 2))
                 self.wrapper.graph.reference_spectrum = np.ones((len(data), 2))
                 self.is_first_data = False
@@ -82,9 +84,9 @@ class ControlPanelInterface(tk.Frame):
 
     def add_listener_(self):
         self.var = tk.StringVar(value=self.options[0])
-        i = 0
         for option in self.options:
-            radio = tk.Radiobutton(self, text=option, variable=self.var, value=option, command=self.on_choice, **self.style_dict["Button"])
+            radio = tk.Radiobutton(self, text=option, variable=self.var, value=option, command=self.on_choice,
+                                   **self.style_dict["Button"])
             radio.pack(anchor=tk.E, side=tk.TOP, pady=10)
 
     def toggle_process(self):
@@ -105,23 +107,19 @@ class ControlPanelInterface(tk.Frame):
 
         self.root.after(cooldown_period, lambda: self.start_button.config(state="normal"))
 
-
     def load_func(self):
         the_file = filedialog.askopenfilename(  # Open explorer
             title="Select a .csv file",
-            filetypes=(("CSV Files","*.csv"),) # File type only csv
-            )
-        print(the_file)
-        with open(the_file, 'r') as file: 
+            filetypes=(("CSV Files", "*.csv"),)  # File type only csv
+        )
+        with open(the_file, 'r') as file:
             csv_file = file.readlines()
             self.wrapper.graph.load_graph(csv_file)
 
     def dark_spectrum(self):
-        # change backend method
-        pos = self.wrapper.backend.read_data2()
+        pos = self.wrapper.backend.read_data()
         self.wrapper.graph.set_dark_spectrum(pos)
 
     def ref_button(self):
-        # change backend method
-        pos = self.wrapper.backend.read_data3()
+        pos = self.wrapper.backend.read_data()
         self.wrapper.graph.set_reference_spectrum(pos)

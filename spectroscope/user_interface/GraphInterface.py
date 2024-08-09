@@ -6,7 +6,7 @@ import numpy as np
 
 
 class GraphInterface(tk.Frame):
-    def __init__(self, parent, wrapper,graph_frame):
+    def __init__(self, parent, wrapper, graph_frame):
         tk.Frame.__init__(self, parent, graph_frame)
         self.parent = parent
         self.wrapper = wrapper
@@ -21,7 +21,7 @@ class GraphInterface(tk.Frame):
         self.dark_spectrum = None
         self.reference_spectrum = None
 
-    def set_spectre_positions(self, coord, option:str):
+    def set_spectre_positions(self, coord, option: str):
         self.intensity_pos = coord
         self.calculate_intensity_pos()
         if option == "Intensity":
@@ -52,12 +52,11 @@ class GraphInterface(tk.Frame):
     def calculate_intensity_pos(self):
         self.intensity_pos[:, 1] = self.intensity_pos[:, 1].astype(np.float64) - self.dark_spectrum[:, 1]
 
-
     def set_dark_spectrum(self, noise: np.ndarray):
         self.dark_spectrum = noise
 
-    def set_reference_spectrum(self, refNoise: np.ndarray):
-        self.reference_spectrum = refNoise
+    def set_reference_spectrum(self, ref_noise: np.ndarray):
+        self.reference_spectrum = ref_noise
         # self.reference_spectrum[:, 1] -= self.dark_spectrum[:, 1]
 
     def get_positions_frame(self):
@@ -88,7 +87,8 @@ class GraphInterface(tk.Frame):
         array = np.array(float_data)
         self.show_graph_pos(array)
 
-    def csv_to_numpy_array(self, file_path: str):
+    @staticmethod
+    def csv_to_numpy_array(file_path: str):
         data = np.loadtxt(file_path, delimiter=',', dtype=int)
         return data
 
@@ -107,10 +107,9 @@ class GraphInterface(tk.Frame):
 
         self.ax.plot(x_point, y_point)
 
-
         if self.canvas is None:
-        #     self.canvas.get_tk_widget().destroy()
             self.canvas = FigureCanvasTkAgg(self.fig, master=self.graph_frame)
+
         self.canvas.draw()
         self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
